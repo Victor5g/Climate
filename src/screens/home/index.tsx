@@ -25,7 +25,6 @@ import {
   AntDesign, 
   Ionicons, 
   Feather, 
-  FontAwesome5,
   Fontisto,
   MaterialCommunityIcons
  } from '@expo/vector-icons'; 
@@ -34,15 +33,18 @@ import {
 import themes from '../../themes';
 
 //images
-import Rain from '../../assets/illustrations/Rain.png'
+import Rain from '../../assets/illustrations/Rain.png';
+import Sun from '../../assets/illustrations/Sun.png';
+import Night from '../../assets/illustrations/Night.png';
+import Cloud from '../../assets/illustrations/Cloud.png';
 
 
 export default function Home() {
 
-  const [theme, setTheme] = useState([]);
+  const [theme, setTheme] = useState(themes.cloudyTheme.background);
 
   return (
-    <Gradient  theme={themes.cloudyTheme.background}>
+    <Gradient  theme={theme}>
      <ScrollView style={{flex:1, paddingTop:30}}>
 
       <ContentTitle>
@@ -50,7 +52,7 @@ export default function Home() {
       </ContentTitle>
 
       <ContentIlustration>
-          <Image style={{width:"80%", height:"100%", position:'absolute', right:0, bottom:40}} source={Rain} /> 
+          <Image style={{width:"80%", height:"106%", position:'absolute', right:0, bottom:40}} source={Sun} /> 
           <TitleTemp>19&deg;</TitleTemp>
       </ContentIlustration>
 
@@ -59,7 +61,7 @@ export default function Home() {
                   65%
           </TextMoisture>
 
-          <TextDay>
+             <TextDay>
                 <TextBold>Segunda feira{" "}</TextBold>
                 <TextDate>10 de agosto de 2022</TextDate> 
               </TextDay>
@@ -74,17 +76,17 @@ export default function Home() {
                 showsHorizontalScrollIndicator={false}
                 alwaysBounceHorizontal={true}
                   >
-                    <ItemContentScroll>
+                    <ItemContentScroll onPress={()=>{setTheme(themes.cloudyTheme.background)}}>
                        <Ionicons name="rainy-outline" size={36} color="white" />
                         <TextItem> 11h </TextItem>
                     </ItemContentScroll>
 
-                    <ItemContentScroll>
+                    <ItemContentScroll onPress={()=>{setTheme(themes.nightTheme.background)}}>
                        <Ionicons name="partly-sunny-outline" size={30} color="white" />
                        <TextItem> 12h </TextItem>
                     </ItemContentScroll>
 
-                    <ItemContentScroll>
+                    <ItemContentScroll onPress={()=>{setTheme(themes.sunTheme.background)}} >
                        <Feather name="sun" size={30} color="white" />
                        <TextItem> 13h </TextItem>
                     </ItemContentScroll>
