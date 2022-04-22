@@ -7,46 +7,34 @@ type GradientTypes = {
   children:any;
 }
 
-export const Gradient = ({theme, children}:GradientTypes) =>{
+export const Gradient = ({theme, children}:GradientTypes) => {
   return (
-  <LinearGradient colors={theme} style={{flex:1}}>
-    <SafeAreaView>
-      {children}
-    </SafeAreaView>
-  </LinearGradient>
+    <LinearGradient colors={theme} style={{flex:1}}>
+      <SafeAreaView style={{flex:1}}>
+         {children}
+      </SafeAreaView>
+    </LinearGradient>
   )
 }
-//height: ${Dimensions.get('window').height+'px'};
-export const ContentBody = styled.View`
-width:${Dimensions.get('window').width+'px'};
-height:910px;
-padding:${Platform.OS === 'ios'? `13px 16px 13px 16px` : `30px 16px 13px 16px`};
-`;
-
-export const Wrapper = styled.View`
-width:100%;
-height: 100%;
-align-items:flex-start;
-justify-content:flex-start;
-flex-direction:column;
-`;
 
 export const ContentTitle = styled.View`
 width:129px;
 `;
 
 export const Title = styled.Text`
-color:#1F5467;
+color:#FFF;
 font-weight:500 ;
 font-size:28px;
+padding-left:16px ;
 `;
 
 export const ContentIlustration = styled.View`
 width:100%;
-height:45%;
+height:320px;
 top:16px;
 align-items:flex-start;
 justify-content:flex-end;
+padding-left:16px ;
 
 `;
 
@@ -66,6 +54,7 @@ color:#FFF;
 top:8px;
 font-size:22px;
 font-weight:300;
+padding-left:16px ;
 `;
 
 export const TextDay = styled.Text`
@@ -73,6 +62,8 @@ color:#FFF;
 top:20px;
 font-size:22px;
 font-weight:100;
+padding-left:16px ;
+padding-right:16px ;
 `;
 
 export const TextDate = styled.Text`
@@ -86,24 +77,35 @@ export const TextAddres = styled.Text`
  top:30px;
  color:#FFF;
  font-size:18px;
+ padding-left:16px ;
+ padding-right:16px ;
 `;
 
-export const WrapperScroll = styled.View`
+export const WrapperScroll = styled.ScrollView`
  top:40px;
- width:${Dimensions.get('window').width+'px'};
- left:-16px;
+ width:${Dimensions.get('screen').width+'px'};
+ height:130px;
+ margin-bottom:39%;
 `;
 
-
-export const ItemContentScroll = styled.View`
-width:120px;
-height:120px;
+export const ItemContentScroll = styled.TouchableOpacity`
+width:100px;
+height:100px;
 margin-left:5px ;
 margin-right:5px ;
-justify-content:space-between ;
-background-color:#A9C5CE ;
-opacity:0.5 ;
+padding:8px;
+align-items:center ;
+justify-content:space-around ;
+background-color:rgba(255, 255, 255, 0.2) ;
 border-radius:12px;
+align-items: center;
+flex-direction:column ;
+`;
+
+export const TextItem = styled.Text`
+ color:#FFF;
+ font-size:20px;
+ opacity:1;
 `;
 
 export const ButtonUpdate = styled.TouchableOpacity`
@@ -114,7 +116,7 @@ export const ButtonUpdate = styled.TouchableOpacity`
  height:70px;
  border-radius:100px ;
  right: 20px;
- bottom:40px;
+ bottom:20px;
  background-color:#1F5467;
  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
