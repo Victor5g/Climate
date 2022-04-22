@@ -96,7 +96,7 @@ margin-right:5px ;
 padding:8px;
 align-items:center ;
 justify-content:space-around ;
-background-color:rgba(255, 255, 255, 0.2) ;
+background-color:rgba(255, 255, 255, 0.1) ;
 border-radius:12px;
 align-items: center;
 flex-direction:column ;
@@ -116,7 +116,7 @@ export const ButtonUpdate = styled.TouchableOpacity`
  height:70px;
  border-radius:100px ;
  right: 20px;
- bottom:20px;
+ bottom:40px;
  background-color:#1F5467;
  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;

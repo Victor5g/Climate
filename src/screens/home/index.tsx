@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { Image, ScrollView, View } from 'react-native'
+import { useState } from 'react';
+import { Image, ScrollView } from 'react-native'
 
 import {  
   Title, 
@@ -37,6 +38,8 @@ import Rain from '../../assets/illustrations/Rain.png'
 
 
 export default function Home() {
+
+  const [theme, setTheme] = useState([]);
 
   return (
     <Gradient  theme={themes.cloudyTheme.background}>
