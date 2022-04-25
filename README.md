@@ -22,18 +22,20 @@
   
 </p>
 
-## 🛠 Technologies 
+##  📚 Languages, dependencies, libs 
 - [Expo](https://expo.dev/)
 - [React Native](https://reactnative.dev/)
 - [Styled-Components](https://styled-components.com/)
 - [Vector-Icon](https://docs.expo.dev/guides/icons/#expovector-icons)
                                                                                                                               
                                                                                                                               
-## ☁️ API
+## ⚙️ API
 - [OpenWeather](https://openweathermap.org/)                                                                                                                               
                                                                                                                               
-## ⚙️ How to run
+## 🛠  How to run
 
+### Service-API
+- Generate your API-KEY by following these [instructions](https://docs.thingpulse.com/how-tos/openweathermap-key/);
 - Clone the repository and access the folder;
 - Install dependencies with `yarn`;
 - Start the project with `yarn android` or `yarn ios`;
