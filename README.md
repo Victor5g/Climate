@@ -22,11 +22,13 @@
   
 </p>
 
-##  📚 Languages, dependencies, libs 
+## ✨ Technologies 
 - [Expo](https://expo.dev/)
 - [React Native](https://reactnative.dev/)
 - [Styled-Components](https://styled-components.com/)
 - [Vector-Icon](https://docs.expo.dev/guides/icons/#expovector-icons)
+- [Shimmer-Placeholder](https://github.com/tomzaku/react-native-shimmer-placeholder)
+- [Linear-Gradient](https://docs.expo.dev/versions/latest/sdk/linear-gradient/)
                                                                                                                               
                                                                                                                               
 ## ⚙️ API
@@ -34,8 +36,9 @@
                                                                                                                               
 ## 🛠  How to run
 
-### Service-API
 - Generate your API-KEY by following these [instructions](https://docs.thingpulse.com/how-tos/openweathermap-key/);
 - Clone the repository and access the folder;
+- Copy your API-Key, access the `api.ts` file in the path `Climate/src/config/`
+- Paste your Api-Key in `const API_KEY =" YOUR_API_KEY "`;
 - Install dependencies with `yarn`;
 - Start the project with `yarn android` or `yarn ios`;
