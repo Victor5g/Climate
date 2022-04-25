@@ -7,8 +7,13 @@
 
 <p align="center">
   <a href="https://github.com/Victor5g/Climate/blob/main/LICENSE">
+     <img alt="License" src="https://img.shields.io/static/v1?label=React-Native&message=0.64.3&color=202020&labelColor=008CCD">
+     <img alt="License" src="https://img.shields.io/static/v1?label=Expo&message=44.0.0&color=FFFFFF&labelColor=000000">
+     <img alt="License" src="https://img.shields.io/static/v1?label=Typescript&message=4.3.5&color=FFFFFF&labelColor=0068FF">
      <img alt="License" src="https://img.shields.io/static/v1?label=license&message=MIT&color=8257E5&labelColor=000000">
   </a>
+    
+                                  
 </p>
 
 ## 🧾 Description
