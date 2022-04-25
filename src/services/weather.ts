@@ -14,10 +14,7 @@ export const getClimate = async (lat: number, long: number) => {
         return error;
       });
 
-    if (response.status !== 200) {
-      return response;
-    }
-    return response.data;
+    return response;
   } catch (error) {
     console.log(`Error-getClimate(): ${error}`);
   }

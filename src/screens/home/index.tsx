@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { ScrollView } from "react-native";
+import { Alert, ScrollView } from "react-native";
 import * as Location from "expo-location";
 
 import {
@@ -71,13 +71,21 @@ export default function Home() {
       let { coords } = await Location.getCurrentPositionAsync({});
       getLocationAddres(coords.latitude, coords.longitude);
       getWeather(coords.latitude, coords.longitude);
+    } else {
+      setVisible(false);
+      Error("Permissão necessária para utilizar o Climate");
     }
   };
 
   const getWeather = async (lat: number, long: number) => {
     let response = await getClimate(lat, long);
-    setWeather(response);
-    dayOrNight(response?.weather[0].icon);
+    if (response.status === 200) {
+      setWeather(response.data);
+      dayOrNight(response.data.weather[0].icon);
+    } else {
+      setVisible(false);
+      Error("Error, por favor tente mais tarde");
+    }
   };
 
   const formater = (value: any) => {
@@ -94,9 +102,16 @@ export default function Home() {
       if (night) {
         setTheme(themes.nightTheme);
       }
+    } catch {
+      setVisible(false);
+      Error("Error, por favor tente novamente mais tarde");
     } finally {
       setVisible(true);
     }
+  };
+
+  const Error = (message: string) => {
+    Alert.alert(message);
   };
 
   useEffect(() => {
