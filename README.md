@@ -15,8 +15,9 @@
  ☀️ App that monitors the weather according to your location ❄️
 
 ## 🖼 GIF 
-<p align="center">
-  
+<p align="center">                       
+  <img src='https://user-images.githubusercontent.com/51713169/165180040-9619cd20-7393-4a7a-956b-0367d565daa3.gif' width='310' />              
+  <img src='https://user-images.githubusercontent.com/51713169/165179729-7655f379-dacc-4069-a9c7-18fa1c510776.gif' width='300' />
 
   
 </p>
