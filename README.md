@@ -12,7 +12,7 @@
 </p>
 
 ## 🧾 Description
- ☀️ App that monitors the weather according to your location ❄️
+ ☀️ Application that displays climate data for a region using the user's location ❄️
 
 ## 🖼 GIF 
 <p align="center">                       
@@ -25,7 +25,13 @@
 ## 🛠 Technologies 
 - [Expo](https://expo.dev/)
 - [React Native](https://reactnative.dev/)
-
+- [Styled-Components](https://styled-components.com/)
+- [Vector-Icon](https://docs.expo.dev/guides/icons/#expovector-icons)
+                                                                                                                              
+                                                                                                                              
+## ☁️ API
+- [OpenWeather](https://openweathermap.org/)                                                                                                                               
+                                                                                                                              
 ## ⚙️ How to run
 
 - Clone the repository and access the folder;
