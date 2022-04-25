@@ -1,3 +1,3 @@
 export const nightTheme = {
-  background: ['#1F5467','#012639']
- }
+  background: ["#1F5467", "#012639", "#012639"],
+};

@@ -1,3 +1,3 @@
 export const sunTheme = {
-  background: ['#84D5F5','#1181B0']
- }
+  background: ["#84D5F5", "#1181B0", "#1181B0"],
+};

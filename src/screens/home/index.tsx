@@ -1,10 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { Image, ScrollView } from 'react-native'
+import React, { useState, useEffect } from "react";
+import { StatusBar } from "expo-status-bar";
+import { ScrollView } from "react-native";
+import * as Location from "expo-location";
 
-import {  
-  Title, 
-  Gradient,
+import {
+  Title,
   ContentTitle,
   ContentIlustration,
   TitleTemp,
@@ -12,113 +12,161 @@ import {
   TextBold,
   TextDay,
   TextDate,
-  TextItem,
   TextAddres,
-  ButtonUpdate,
-  WrapperScroll,
-  ItemContentScroll,
-} from './styles';
+  ContentMinMax,
+  TextMinMax,
+} from "./styles";
 
-//icon
-import { 
-  Entypo, 
-  AntDesign, 
-  Ionicons, 
-  Feather, 
-  Fontisto,
-  MaterialCommunityIcons
- } from '@expo/vector-icons'; 
+import { getClimate } from "../../services/weather";
 
-//themes
-import themes from '../../themes';
+import { weekNames } from "../../../utils/weeks";
+import { monthNames } from "../../../utils/months";
+import { modelWeather } from "../../model/weather";
 
-//images
-import Rain from '../../assets/illustrations/Rain.png';
-import Sun from '../../assets/illustrations/Sun.png';
-import Night from '../../assets/illustrations/Night.png';
-import Cloud from '../../assets/illustrations/Cloud.png';
+import themes from "../../themes";
 
+import Gradient from "../../components/Gradient";
+import Shimmer from "../../components/Shimmer";
+import Illustration from "../../components/Illustration";
+import Icon from "../../components/Icons";
+import ButtonUp from "../../components/Button";
 
 export default function Home() {
+  const [visible, setVisible] = useState(false);
+  const [theme, setTheme] = useState(themes.sunTheme);
 
-  const [theme, setTheme] = useState(themes.cloudyTheme.background);
+  const [weather, setWeather] = useState<modelWeather>();
+  const [addres, setAddres] = useState<Location.LocationGeocodedAddress>();
+  const [currentDate, setDate] = useState({ week: "", date: "" });
+
+  const reqLocationPermission = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      return false;
+    }
+    return true;
+  };
+
+  const getLocationAddres = async (lat: number, long: number) => {
+    let t = await Location.reverseGeocodeAsync({
+      latitude: lat,
+      longitude: long,
+    });
+    setAddres(t[0]);
+  };
+
+  const getCurrentDate = () => {
+    let instance = new Date();
+    let date = instance.getDate();
+    let day = weekNames[instance.getDay()];
+    let month = monthNames[instance.getMonth()];
+    let year = instance.getFullYear();
+    setDate({ week: day, date: `${date} de ${month} de ${year}` });
+  };
+
+  const getLocation = async () => {
+    setVisible(false);
+    let statePermission = await reqLocationPermission();
+    if (statePermission) {
+      let { coords } = await Location.getCurrentPositionAsync({});
+      getLocationAddres(coords.latitude, coords.longitude);
+      getWeather(coords.latitude, coords.longitude);
+    }
+  };
+
+  const getWeather = async (lat: number, long: number) => {
+    let response = await getClimate(lat, long);
+    setWeather(response);
+    dayOrNight(response?.weather[0].icon);
+  };
+
+  const formater = (value: any) => {
+    return value.toString().split(".")[0];
+  };
+
+  const dayOrNight = (value: string) => {
+    try {
+      let day = value.includes("d");
+      let night = value.includes("n");
+      if (day) {
+        setTheme(themes.sunTheme);
+      }
+      if (night) {
+        setTheme(themes.nightTheme);
+      }
+    } finally {
+      setVisible(true);
+    }
+  };
+
+  useEffect(() => {
+    getLocation();
+    getCurrentDate();
+  }, []);
 
   return (
-    <Gradient  theme={theme}>
-     <ScrollView style={{flex:1, paddingTop:30}}>
+    <Gradient theme={theme}>
+      <ScrollView style={{ flex: 1, paddingTop: 30 }}>
+        <ContentTitle>
+          <Title>
+            <Shimmer theme={theme} visible={visible}>
+              {weather?.weather[0].description}{" "}
+            </Shimmer>
+          </Title>
+        </ContentTitle>
 
-      <ContentTitle>
-          <Title>Dia chuvoso e frio</Title>
-      </ContentTitle>
+        <ContentIlustration>
+          {visible ? (
+            <Illustration IconName={weather?.weather[0]?.icon} />
+          ) : null}
 
-      <ContentIlustration>
-          <Image style={{width:"80%", height:"106%", position:'absolute', right:0, bottom:40}} source={Sun} /> 
-          <TitleTemp>19&deg;</TitleTemp>
-      </ContentIlustration>
+          <Shimmer theme={theme} visible={visible}>
+            <TitleTemp>
+              {visible ? formater(weather?.main.temp) : null}&deg;
+            </TitleTemp>
+          </Shimmer>
+        </ContentIlustration>
 
-      <TextMoisture>
-          <Entypo name="drop" size={24} color="white"/>{" "}
-                  65%
-          </TextMoisture>
+        <TextMoisture>
+          <Shimmer width={100} theme={theme} visible={visible}>
+            <Icon provider="Entypo" name="drop" size={24} color="white" />{" "}
+            {weather?.main?.humidity}%
+          </Shimmer>
+        </TextMoisture>
 
-             <TextDay>
-                <TextBold>Segunda feira{" "}</TextBold>
-                <TextDate>10 de agosto de 2022</TextDate> 
-              </TextDay>
+        <TextDay>
+          <Shimmer width={220} theme={theme} visible={visible}>
+            <TextBold>{currentDate.week} </TextBold>
+            <TextDate>{currentDate.date}</TextDate>
+          </Shimmer>
+        </TextDay>
 
-              <TextAddres>
-                R. Mario Pereira, 42, Pres. Dutra - MA, 65760-000, 
-              </TextAddres>
+        <TextAddres>
+          <Shimmer width={360} theme={theme} visible={visible}>
+            {addres?.street}, {addres?.streetNumber}, {addres?.city} -{" "}
+            {addres?.region}, {addres?.postalCode}
+          </Shimmer>
+        </TextAddres>
 
-              
-                <WrapperScroll 
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                alwaysBounceHorizontal={true}
-                  >
-                    <ItemContentScroll onPress={()=>{setTheme(themes.cloudyTheme.background)}}>
-                       <Ionicons name="rainy-outline" size={36} color="white" />
-                        <TextItem> 11h </TextItem>
-                    </ItemContentScroll>
+        <ContentMinMax>
+          <Shimmer width={350} theme={theme} visible={visible}>
+            <TextMinMax>
+              <TextBold>
+                Max: {visible ? formater(weather?.main.temp_max) : null}&deg;
+              </TextBold>
+            </TextMinMax>
 
-                    <ItemContentScroll onPress={()=>{setTheme(themes.nightTheme.background)}}>
-                       <Ionicons name="partly-sunny-outline" size={30} color="white" />
-                       <TextItem> 12h </TextItem>
-                    </ItemContentScroll>
-
-                    <ItemContentScroll onPress={()=>{setTheme(themes.sunTheme.background)}} >
-                       <Feather name="sun" size={30} color="white" />
-                       <TextItem> 13h </TextItem>
-                    </ItemContentScroll>
-
-                    <ItemContentScroll>
-                      <Fontisto name="night-alt-rain" size={30} color="white" />
-                       <TextItem> 14h </TextItem>
-                    </ItemContentScroll>
-
-                    <ItemContentScroll>
-                       <MaterialCommunityIcons name="weather-night" size={30} color="white"/>
-                       <TextItem> 15h </TextItem>
-                    </ItemContentScroll>
-
-                    <ItemContentScroll>
-                       <Ionicons name="md-cloudy-night-outline" size={30} color="white" />
-                       <TextItem> 16h </TextItem>
-                    </ItemContentScroll>
-
-                    <ItemContentScroll>
-                      <Fontisto name="day-rain" size={30} color="white" />
-                      <TextItem> 17h </TextItem>
-                    </ItemContentScroll>
-
-                  </WrapperScroll>
-           
+            <TextMinMax>
+              <TextBold>
+                Min: {visible ? formater(weather?.main.temp_min) : null}&deg;
+              </TextBold>
+            </TextMinMax>
+          </Shimmer>
+        </ContentMinMax>
       </ScrollView>
-         <ButtonUpdate onPress={()=>{console.log("Update")}}>
-           <AntDesign name="reload1" size={30} color="white"/>
-        </ButtonUpdate>
-       <StatusBar style='auto'/>
+
+      <ButtonUp loading={visible} theme={theme} onPress={() => getLocation()} />
+      <StatusBar translucent backgroundColor="transparent" />
     </Gradient>
-    
   );
 }
