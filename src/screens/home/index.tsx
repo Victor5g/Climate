@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Alert, ScrollView } from "react-native";
+import { Alert, ScrollView, NativeSyntheticEvent } from "react-native";
 import * as Location from "expo-location";
 
 import {
+  Container,
+  StyleScroll,
   Title,
   ContentTitle,
   ContentIlustration,
@@ -33,6 +35,7 @@ import ButtonUp from "../../components/Button";
 
 export default function Home() {
   const [visible, setVisible] = useState(false);
+  const [visibleButton, setVisibleButton] = useState(true);
   const [theme, setTheme] = useState(themes.sunTheme);
 
   const [weather, setWeather] = useState<modelWeather>();
@@ -114,6 +117,19 @@ export default function Home() {
     Alert.alert(message);
   };
 
+  const disableButton = (e: NativeSyntheticEvent<any>) => {
+    let paddingToBottom = 10;
+    paddingToBottom += e.nativeEvent.layoutMeasurement.height;
+    if (
+      e.nativeEvent.contentOffset.y >=
+      e.nativeEvent.contentSize.height - paddingToBottom
+    ) {
+      setVisibleButton(false);
+    } else {
+      setVisibleButton(true);
+    }
+  };
+
   useEffect(() => {
     getLocation();
     getCurrentDate();
@@ -121,67 +137,75 @@ export default function Home() {
 
   return (
     <Gradient theme={theme}>
-      <ScrollView style={{ flex: 1, paddingTop: 30 }}>
-        <ContentTitle>
-          <Title>
+      <Container>
+        <ScrollView
+          style={StyleScroll}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+          onScroll={(e) => disableButton(e)}
+        >
+          <ContentTitle>
+            <Title>
+              <Shimmer theme={theme} visible={visible}>
+                {weather?.weather[0].description}{" "}
+              </Shimmer>
+            </Title>
+          </ContentTitle>
+
+          <ContentIlustration>
+            {visible ? (
+              <Illustration IconName={weather?.weather[0]?.icon} />
+            ) : null}
+
             <Shimmer theme={theme} visible={visible}>
-              {weather?.weather[0].description}{" "}
+              <TitleTemp>
+                {visible ? formater(weather?.main.temp) : null}&deg;
+              </TitleTemp>
             </Shimmer>
-          </Title>
-        </ContentTitle>
+          </ContentIlustration>
 
-        <ContentIlustration>
-          {visible ? (
-            <Illustration IconName={weather?.weather[0]?.icon} />
-          ) : null}
+          <TextMoisture>
+            <Shimmer width={100} theme={theme} visible={visible}>
+              <Icon provider="Entypo" name="drop" size={24} color="white" />{" "}
+              {weather?.main?.humidity}%
+            </Shimmer>
+          </TextMoisture>
 
-          <Shimmer theme={theme} visible={visible}>
-            <TitleTemp>
-              {visible ? formater(weather?.main.temp) : null}&deg;
-            </TitleTemp>
-          </Shimmer>
-        </ContentIlustration>
+          <TextDay>
+            <Shimmer width={220} theme={theme} visible={visible}>
+              <TextBold>{currentDate.week} </TextBold>
+              <TextDate>{currentDate.date}</TextDate>
+            </Shimmer>
+          </TextDay>
 
-        <TextMoisture>
-          <Shimmer width={100} theme={theme} visible={visible}>
-            <Icon provider="Entypo" name="drop" size={24} color="white" />{" "}
-            {weather?.main?.humidity}%
-          </Shimmer>
-        </TextMoisture>
+          <TextAddres>
+            <Shimmer width={360} theme={theme} visible={visible}>
+              {addres?.street}, {addres?.streetNumber}, {addres?.city} -{" "}
+              {addres?.region}, {addres?.postalCode}
+            </Shimmer>
+          </TextAddres>
 
-        <TextDay>
-          <Shimmer width={220} theme={theme} visible={visible}>
-            <TextBold>{currentDate.week} </TextBold>
-            <TextDate>{currentDate.date}</TextDate>
-          </Shimmer>
-        </TextDay>
+          <ContentMinMax>
+            <Shimmer width={350} theme={theme} visible={visible}>
+              <TextMinMax>
+                <TextBold>
+                  Max: {visible ? formater(weather?.main.temp_max) : null}&deg;
+                </TextBold>
+              </TextMinMax>
 
-        <TextAddres>
-          <Shimmer width={360} theme={theme} visible={visible}>
-            {addres?.street}, {addres?.streetNumber}, {addres?.city} -{" "}
-            {addres?.region}, {addres?.postalCode}
-          </Shimmer>
-        </TextAddres>
-
-        <ContentMinMax>
-          <Shimmer width={350} theme={theme} visible={visible}>
-            <TextMinMax>
-              <TextBold>
-                Max: {visible ? formater(weather?.main.temp_max) : null}&deg;
-              </TextBold>
-            </TextMinMax>
-
-            <TextMinMax>
-              <TextBold>
-                Min: {visible ? formater(weather?.main.temp_min) : null}&deg;
-              </TextBold>
-            </TextMinMax>
-          </Shimmer>
-        </ContentMinMax>
-      </ScrollView>
-
-      <ButtonUp loading={visible} theme={theme} onPress={() => getLocation()} />
-      <StatusBar translucent backgroundColor="transparent" />
+              <TextMinMax>
+                <TextBold>
+                  Min: {visible ? formater(weather?.main.temp_min) : null}&deg;
+                </TextBold>
+              </TextMinMax>
+            </Shimmer>
+          </ContentMinMax>
+        </ScrollView>
+        {visibleButton ? (
+          <ButtonUp loading={visible} theme={theme} onPress={getLocation} />
+        ) : null}
+        <StatusBar translucent backgroundColor="transparent" />
+      </Container>
     </Gradient>
   );
 }

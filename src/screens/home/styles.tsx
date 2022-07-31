@@ -1,5 +1,15 @@
 import styled from "styled-components/native";
-import { Platform, Dimensions } from "react-native";
+import { Platform } from "react-native";
+
+export const Container = styled.View`
+width:100%;
+height:100%;
+`;
+
+export const StyleScroll = {
+  paddingTop:Platform.OS === `android`?30:0,
+  paddingHorizontal:16,
+}
 
 export const ContentTitle = styled.View`
   width: 140px;
@@ -10,7 +20,6 @@ export const Title = styled.Text`
   color: #fff;
   font-weight: 500;
   font-size: 28px;
-  padding-left: 16px;
 `;
 
 export const ContentIlustration = styled.View`
@@ -19,7 +28,6 @@ export const ContentIlustration = styled.View`
   top: 16px;
   align-items: flex-start;
   justify-content: flex-end;
-  padding-left: 16px;
 `;
 
 export const TitleTemp = styled.Text`
@@ -29,7 +37,7 @@ export const TitleTemp = styled.Text`
 `;
 
 export const TextBold = styled.Text`
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 export const TextMoisture = styled.Text`
@@ -37,7 +45,6 @@ export const TextMoisture = styled.Text`
   top: 8px;
   font-size: 22px;
   font-weight: 300;
-  padding-left: 16px;
 `;
 
 export const TextDay = styled.Text`
@@ -45,7 +52,6 @@ export const TextDay = styled.Text`
   top: 20px;
   font-size: 22px;
   font-weight: 100;
-  padding-left: 16px;
   padding-right: 16px;
 `;
 
@@ -60,17 +66,15 @@ export const TextAddres = styled.Text`
   margin-top: 30px;
   color: #fff;
   font-size: 18px;
-  padding-left: 16px;
   padding-right: 16px;
 `;
 
 export const ContentMinMax = styled.View`
-  width: ${Dimensions.get("screen").width + "px"};
+  width: 100%;
+  height:120px;
   flex-direction: row;
   justify-content: space-between;
-  padding-left: 16px;
-  padding-right: 23px;
-  margin-bottom: 45%;
+  align-items:flex-start;
 `;
 
 export const TextMinMax = styled.Text`
@@ -82,8 +86,7 @@ export const TextMinMax = styled.Text`
 export const ItemContentScroll = styled.View`
   width: 100px;
   height: 100px;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-horizontal:5px'
   padding: 8px;
   align-items: center;
   justify-content: space-around;
