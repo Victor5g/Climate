@@ -2,14 +2,14 @@ import styled from "styled-components/native";
 import { Platform } from "react-native";
 
 export const Container = styled.View`
-width:100%;
-height:100%;
+  width: 100%;
+  height: 100%;
 `;
 
 export const StyleScroll = {
-  paddingTop:Platform.OS === `android`?30:0,
-  paddingHorizontal:16,
-}
+  paddingTop: Platform.OS === `android` ? 30 : 0,
+  paddingHorizontal: 16,
+};
 
 export const ContentTitle = styled.View`
   width: 140px;
@@ -71,10 +71,10 @@ export const TextAddres = styled.Text`
 
 export const ContentMinMax = styled.View`
   width: 100%;
-  height:120px;
+  height: ${Platform.OS === "android" ? "220px" : "120px"};
   flex-direction: row;
   justify-content: space-between;
-  align-items:flex-start;
+  align-items: flex-start;
 `;
 
 export const TextMinMax = styled.Text`

@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacityProps, Platform } from "react-native";
+import { TouchableOpacityProps } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { MaterialIcons } from "@expo/vector-icons";

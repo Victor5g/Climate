@@ -32,12 +32,13 @@ import Shimmer from "../../components/Shimmer";
 import Illustration from "../../components/Illustration";
 import Icon from "../../components/Icons";
 import ButtonUp from "../../components/Button";
+import ErroScreen from "../../components/Error";
 
 export default function Home() {
-
   const [visible, setVisible] = useState(false);
   const [visibleButton, setVisibleButton] = useState(true);
   const [theme, setTheme] = useState(themes.sunTheme);
+  const [error, setError] = useState(false);
 
   const [weather, setWeather] = useState<modelWeather>();
   const [addres, setAddres] = useState<Location.LocationGeocodedAddress>();
@@ -57,6 +58,7 @@ export default function Home() {
 
   const getLocation = async () => {
     setVisible(false);
+    setError(false);
     let statePermission = await reqLocationPermission();
     if (statePermission) {
       let { coords } = await Location.getCurrentPositionAsync({});
@@ -64,7 +66,7 @@ export default function Home() {
       getWeather(coords.latitude, coords.longitude);
     } else {
       setVisible(false);
-      Error("Permissão necessária para utilizar o Climate");
+      AlertMessage("Permissão necessária para utilizar o Climate");
     }
   };
 
@@ -75,7 +77,7 @@ export default function Home() {
       dayOrNight(response.data.weather[0].icon);
     } else {
       setVisible(false);
-      Error("Error, por favor tente mais tarde");
+      setError(true);
     }
   };
 
@@ -95,13 +97,13 @@ export default function Home() {
       }
     } catch {
       setVisible(false);
-      Error("Error, por favor tente novamente mais tarde");
+      setError(true);
     } finally {
       setVisible(true);
     }
   };
 
-  const Error = (message: string) => {
+  const AlertMessage = (message: string) => {
     Alert.alert(message);
   };
 
@@ -126,70 +128,76 @@ export default function Home() {
   return (
     <Gradient theme={theme}>
       <Container>
-        <ScrollView
-          style={StyleScroll}
-          showsVerticalScrollIndicator={false}
-          bounces={false}
-          onScroll={(e) => disableButton(e)}
-        >
-          <ContentTitle>
-            <Title>
+        {!error ? (
+          <ScrollView
+            style={StyleScroll}
+            showsVerticalScrollIndicator={false}
+            bounces={false}
+            onScroll={(e) => disableButton(e)}
+          >
+            <ContentTitle>
+              <Title>
+                <Shimmer theme={theme} visible={visible}>
+                  {weather?.weather[0].description}{" "}
+                </Shimmer>
+              </Title>
+            </ContentTitle>
+
+            <ContentIlustration>
+              {visible ? (
+                <Illustration IconName={weather?.weather[0]?.icon} />
+              ) : null}
+
               <Shimmer theme={theme} visible={visible}>
-                {weather?.weather[0].description}{" "}
+                <TitleTemp>
+                  {visible ? formater(weather?.main.temp) : null}&deg;
+                </TitleTemp>
               </Shimmer>
-            </Title>
-          </ContentTitle>
+            </ContentIlustration>
 
-          <ContentIlustration>
-            {visible ? (
-              <Illustration IconName={weather?.weather[0]?.icon} />
-            ) : null}
+            <TextMoisture>
+              <Shimmer width={100} theme={theme} visible={visible}>
+                <Icon provider="Entypo" name="drop" size={24} color="white" />{" "}
+                {weather?.main?.humidity}%
+              </Shimmer>
+            </TextMoisture>
 
-            <Shimmer theme={theme} visible={visible}>
-              <TitleTemp>
-                {visible ? formater(weather?.main.temp) : null}&deg;
-              </TitleTemp>
-            </Shimmer>
-          </ContentIlustration>
+            <TextDay>
+              <Shimmer width={220} theme={theme} visible={visible}>
+                <TextBold>{currentDate.week} </TextBold>
+                <TextDate>{currentDate.date}</TextDate>
+              </Shimmer>
+            </TextDay>
 
-          <TextMoisture>
-            <Shimmer width={100} theme={theme} visible={visible}>
-              <Icon provider="Entypo" name="drop" size={24} color="white" />{" "}
-              {weather?.main?.humidity}%
-            </Shimmer>
-          </TextMoisture>
+            <TextAddres>
+              <Shimmer width={360} theme={theme} visible={visible}>
+                {addres?.street}, {addres?.streetNumber}, {addres?.city} -{" "}
+                {addres?.region}, {addres?.postalCode}
+              </Shimmer>
+            </TextAddres>
 
-          <TextDay>
-            <Shimmer width={220} theme={theme} visible={visible}>
-              <TextBold>{currentDate.week} </TextBold>
-              <TextDate>{currentDate.date}</TextDate>
-            </Shimmer>
-          </TextDay>
+            <ContentMinMax>
+              <Shimmer width={350} theme={theme} visible={visible}>
+                <TextMinMax>
+                  <TextBold>
+                    Max: {visible ? formater(weather?.main.temp_max) : null}
+                    &deg;
+                  </TextBold>
+                </TextMinMax>
 
-          <TextAddres>
-            <Shimmer width={360} theme={theme} visible={visible}>
-              {addres?.street}, {addres?.streetNumber}, {addres?.city} -{" "}
-              {addres?.region}, {addres?.postalCode}
-            </Shimmer>
-          </TextAddres>
-
-          <ContentMinMax>
-            <Shimmer width={350} theme={theme} visible={visible}>
-              <TextMinMax>
-                <TextBold>
-                  Max: {visible ? formater(weather?.main.temp_max) : null}&deg;
-                </TextBold>
-              </TextMinMax>
-
-              <TextMinMax>
-                <TextBold>
-                  Min: {visible ? formater(weather?.main.temp_min) : null}&deg;
-                </TextBold>
-              </TextMinMax>
-            </Shimmer>
-          </ContentMinMax>
-        </ScrollView>
-        {visibleButton ? (
+                <TextMinMax>
+                  <TextBold>
+                    Min: {visible ? formater(weather?.main.temp_min) : null}
+                    &deg;
+                  </TextBold>
+                </TextMinMax>
+              </Shimmer>
+            </ContentMinMax>
+          </ScrollView>
+        ) : (
+          <ErroScreen onPress={getLocation} />
+        )}
+        {visibleButton && !error ? (
           <ButtonUp loading={visible} theme={theme} onPress={getLocation} />
         ) : null}
         <StatusBar translucent backgroundColor="transparent" />
