@@ -20,9 +20,9 @@ import {
 } from "./styles";
 
 import { getClimate } from "../../services/weather";
+import { getCurrentDate } from "../../utils/date";
+import { reqLocationPermission } from "../../utils/permissions";
 
-import { weekNames } from "../../../utils/weeks";
-import { monthNames } from "../../../utils/months";
 import { modelWeather } from "../../model/weather";
 
 import themes from "../../themes";
@@ -34,6 +34,7 @@ import Icon from "../../components/Icons";
 import ButtonUp from "../../components/Button";
 
 export default function Home() {
+
   const [visible, setVisible] = useState(false);
   const [visibleButton, setVisibleButton] = useState(true);
   const [theme, setTheme] = useState(themes.sunTheme);
@@ -41,14 +42,6 @@ export default function Home() {
   const [weather, setWeather] = useState<modelWeather>();
   const [addres, setAddres] = useState<Location.LocationGeocodedAddress>();
   const [currentDate, setDate] = useState({ week: "", date: "" });
-
-  const reqLocationPermission = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      return false;
-    }
-    return true;
-  };
 
   const getLocationAddres = async (lat: number, long: number) => {
     let t = await Location.reverseGeocodeAsync({
@@ -58,13 +51,8 @@ export default function Home() {
     setAddres(t[0]);
   };
 
-  const getCurrentDate = () => {
-    let instance = new Date();
-    let date = instance.getDate();
-    let day = weekNames[instance.getDay()];
-    let month = monthNames[instance.getMonth()];
-    let year = instance.getFullYear();
-    setDate({ week: day, date: `${date} de ${month} de ${year}` });
+  const Date = () => {
+    setDate(getCurrentDate());
   };
 
   const getLocation = async () => {
@@ -132,7 +120,7 @@ export default function Home() {
 
   useEffect(() => {
     getLocation();
-    getCurrentDate();
+    Date();
   }, []);
 
   return (
